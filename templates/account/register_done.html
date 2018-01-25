@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome{% endblock title %}
+
+{% block content %}
+    <h1>Welcome {{ new_user.first_name }} {{ new_user.last_name }}</h1>
+    <p>Your account has been successfully created, but you will first need to activate it before login in.</p>
+    <br />
+    <p>Activation Form has been sent to: {{ new_user.email }}</p>
+{% endblock %}

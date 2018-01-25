@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+    <h1>Create an image</h1>
+    <form action="." method="post">
+            {{ form|crispy }}
+            {% csrf_token %}
+            <p><input type="submit" value="Create it!"></p>
+    </form>
+{% endblock %}

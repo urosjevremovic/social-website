@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Activated account{% endblock title %}
+
+{% block content %}
+    <h1>Your account has been successfully activated, {{ user.first_name }} {{ user.last_name }}</h1>
+    <p>You will be redirected to the <a href="{% url 'account:login' %}">login</a> page in a moment.</p>
+    <script type="text/javascript">
+        setTimeout(function() {
+            window.location.href = "{% url 'account:login' %}";
+        }, 2000);
+    </script>
+{% endblock %}
