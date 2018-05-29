@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['urosjevremovic.pythonanywhere.com']
+ALLOWED_HOSTS = ['social-website-demo.herokuapp.com', 'UrosJevremovic.pythonanywhere.com', 'picturest.com', 'www.picturest.com']
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -196,6 +196,10 @@ LOGOUT_URL = reverse_lazy("account:logout")
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda user: reverse_lazy('account:user_detail', args=[user.username]),
 }
+
+REDIS_HOST = 'localhost'
+REDIST_PORT = 6379
+REDIS_DB = 0
 
 CORS_REPLACE_HTTPS_REFERER = True
 HOST_SCHEME = "https://"

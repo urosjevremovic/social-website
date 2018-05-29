@@ -1,6 +1,8 @@
-*.pyc
-*.idea
-*~
-__pycache__
-.DS_Store
-local.py
+build/
+dist/
+*.egg-info/
+*.egg
+*.py[cod]
+__pycache__/
+*.idea/
+*.sqlite3

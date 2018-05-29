@@ -32,6 +32,8 @@ urlpatterns = [
     path('password_reset/complete/', password_reset_complete, name='password_reset_complete'),
     path('', dashboard, name='dashboard'),
     path('social-auth/', include('social_django.urls', namespace='social')),
+    path('api/accounts/', include('account.api.urls', namespace='api-accounts')),
+    path('api/images/', include('images.api.urls', namespace='api-images')),
 ]
 
 if settings.DEBUG:

@@ -81,7 +81,7 @@ def register(request):
             new_user.set_password(user_form.cleaned_data.get('password'))
             new_user.is_active = False
             new_user.save()
-            profile = Profile.objects.create(user=new_user)
+            # profile = Profile.objects.create(user=new_user)
             create_action(new_user, 'created an account')
             return render(request, 'account/register_done.html', {"new_user": new_user})
     else:

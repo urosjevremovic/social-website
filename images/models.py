@@ -13,7 +13,6 @@ class Image(models.Model):
     description = models.TextField(blank=True)
     created = models.DateField(auto_now_add=True, db_index=True)
     users_like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='images_liked', blank=True)
-    num_views = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title

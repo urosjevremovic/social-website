@@ -36,9 +36,10 @@ def image_create(request):
 
 
 def image_detail(request, id, slug):
-    Image.objects.filter(id=id, slug=slug).update(num_views=F('num_views')+1)
     image = get_object_or_404(Image, id=id, slug=slug)
-    return render(request, 'images/detail.html', {'section': 'image', 'image': image, 'total_views': image.num_views})
+    total_views = r.incr(f'image:{image.id}:views')
+    r.zincrby(f'image_ranking', image.id, 1)
+    return render(request, 'images/detail.html', {'section': 'image', 'image': image, 'total_views': total_views})
 
 
 @ajax_required
@@ -76,7 +77,7 @@ def image_list(request):
         images = paginator.page(paginator.num_pages)
     if request.is_ajax():
         return render(request, 'images/list_ajax.html', {'section': 'images', 'images': images})
-    return render(request, 'images/list.html', {'sector': 'images', 'images': images})
+    return render(request, 'images/list.html', {'section': 'images', 'images': images})
 
 
 @login_required
@@ -95,11 +96,13 @@ def users_image_list(request):
         images = paginator.page(paginator.num_pages)
     if request.is_ajax():
         return render(request, 'images/list_ajax.html', {'section': 'my images', 'images': images})
-    return render(request, 'images/list.html', {'sector': 'my images', 'images': images})
+    return render(request, 'images/list.html', {'section': 'my images', 'images': images})
 
 
 @login_required
 def image_ranking(request):
-    most_viewed = Image.objects.all().order_by('-num_views')
-    most_viewed = most_viewed[:10]
+    image_ranking = r.zrange('image_ranking', 0, -1, desc=True)[:10]
+    image_ranking_ids = [int(id) for id in image_ranking]
+    most_viewed = list(Image.objects.filter(id__in=image_ranking_ids))
+    most_viewed.sort(key=lambda x: image_ranking_ids.index(x.id))
     return render(request, 'images/ranking.html', {"section": "ranking", "most_viewed": most_viewed})

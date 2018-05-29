@@ -44,6 +44,7 @@
                 {% for message in messages %}
                     <li class="{{ message.tags }}">
                         {{ message|safe }}
+                        <!--<a href="#" class="del-msg">x</a>-->
                     </li>
                 {% endfor %}
             </ul>

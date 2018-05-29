@@ -5,11 +5,13 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 from .utils import code_generator
+from .models import Profile
 
 
 def post_save_user_receiver(sender, instance, created, *args, **kwargs):
     if created:
         user = instance
+        profile = Profile.objects.create(user=user)
         if not user.is_active:
             user.activation_key = code_generator()
             user.save()
