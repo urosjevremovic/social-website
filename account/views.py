@@ -41,10 +41,13 @@ def user_login(request):
     return render(request, "account/login.html", {"form": form})
 
 
-@login_required
 def dashboard(request):
-    actions = Action.objects.exclude(user=request.user)
-    following_ids = request.user.following.values_list('id', flat=True)
+    if request.user.is_authenticated:
+        actions = Action.objects.exclude(user=request.user)
+        following_ids = request.user.following.values_list('id', flat=True)
+    else:
+        following_ids = ''
+        actions = actions = Action.objects.all()
     paginator = Paginator(actions, 10)
     page = request.GET.get('page')
     if following_ids:

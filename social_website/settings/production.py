@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'images',
     'sorl.thumbnail',
     'actions',
+    'rest_framework',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -211,4 +212,18 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_SECONDS = 1000000
 SECURE_FRAME_DENY = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+
+
 SITE_URL = "https://urosjevremovic.pythonanywhere.com"
+
+

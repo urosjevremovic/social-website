@@ -8,25 +8,23 @@
     <body>
         <div id="header">
             <span class="logo"><a href="{% url 'dashboard' %}">Social Website</a></span>
-            {% if request.user.is_authenticated %}
-                <ul class="menu">
-                    <li {% if section == "dashboard" %}class="selected"{% endif %}>
-                        <a href="{% url 'dashboard' %}">My dashboard</a>
-                    </li>
-                    <li {% if section == "my images" %}class="selected"{% endif %}>
-                        <a href="{% url 'images:users_image_list' %}">My images</a>
-                    </li>
-                    <li {% if section == "images" %}class="selected"{% endif %}>
-                        <a href="{% url 'images:list' %}">Images</a>
-                    </li>
-                    <li {% if section == "people" %}class="selected"{% endif %}>
-                        <a href="{% url 'account:user_list' %}">People</a>
-                    </li>
-                    <li {% if section == "ranking" %}class="selected"{% endif %}>
-                        <a href="{% url 'images:ranking' %}">Most popular images</a>
-                    </li>
-                </ul>
-            {% endif %}
+            <ul class="menu">
+                <li {% if section == "dashboard" %}class="selected"{% endif %}>
+                    <a href="{% url 'dashboard' %}">My dashboard</a>
+                </li>
+                <li {% if section == "my images" %}class="selected"{% endif %}>
+                    <a href="{% url 'images:users_image_list' %}">My images</a>
+                </li>
+                <li {% if section == "images" %}class="selected"{% endif %}>
+                    <a href="{% url 'images:list' %}">Images</a>
+                </li>
+                <li {% if section == "people" %}class="selected"{% endif %}>
+                    <a href="{% url 'account:user_list' %}">People</a>
+                </li>
+                <li {% if section == "ranking" %}class="selected"{% endif %}>
+                    <a href="{% url 'images:ranking' %}">Most popular images</a>
+                </li>
+            </ul>
             <span class="user">
                 {% if request.user.is_authenticated %}
                     Hello {{ request.user.first_name }} {{ request.user.last_name}},
