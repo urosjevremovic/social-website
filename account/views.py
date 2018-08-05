@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
@@ -9,17 +10,15 @@ from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import reverse
-from django.conf import settings
-from django.core.mail import send_mail
-from django.db.models.signals import post_save
+from django.views.generic import FormView, UpdateView
+from django.views.generic.base import View
 
 from common import ajax_required
 from actions.utils import create_action
 from actions.models import Action
 
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
-from .models import Contact, Profile
-from .utils import code_generator
+from .models import Contact
 
 
 def user_login(request):
@@ -39,6 +38,23 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, "account/login.html", {"form": form})
+
+
+class UserLogin(FormView):
+    template_name = 'account/login.html'
+    form_class = LoginForm
+
+    def form_valid(self, form):
+        cd = form.cleaned_data
+        user = authenticate(username=cd.get('username'), password=cd.get('password'))
+        if user is not None:
+            if user.is_active:
+                login(self.request, user)
+                return redirect('account:dashboard')
+            else:
+                return HttpResponse("This account has been suspended.")
+        else:
+            return HttpResponse("Invalid credentials, please try again.")
 
 
 def dashboard(request):
@@ -92,6 +108,20 @@ def register(request):
     return render(request, 'account/register.html', {"form": user_form})
 
 
+class RegisterView(FormView):
+    template_name = 'account/login.html'
+    form_class = UserRegistrationForm
+    success_url = 'account:login'
+
+    def form_valid(self, form):
+        new_user = form.save(commit=False)
+        new_user.set_password(form.cleaned_data.get('password'))
+        new_user.is_active = False
+        new_user.save()
+        create_action(new_user, 'created an account')
+        return render(self.request, 'account/register_done.html', {"new_user": new_user})
+
+
 @login_required
 def edit(request):
     if request.method == "POST":
@@ -110,6 +140,25 @@ def edit(request):
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
     return render(request, 'account/edit.html', {"user_form": user_form, "profile_form": profile_form})
+
+
+class Edit(LoginRequiredMixin, UpdateView):
+    template_name = 'account/edit.html'
+    model = User
+    fields = '__all__'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        if self.request.POST:
+            context['user_form'] = UserEditForm(self.request.POST, instance=self.object)
+            context['profile_form'] = ProfileEditForm(self.request.POST, instance=self.object)
+        else:
+            context['user_form'] = UserEditForm(instance=self.object)
+            context['profile_form'] = ProfileEditForm(instance=self.object)
+        return context
 
 
 @login_required

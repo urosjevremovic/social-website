@@ -1,15 +1,16 @@
 from django.urls import path
-from django.contrib.auth.views import (logout, login, logout_then_login, )
+from django.contrib.auth.views import (logout, LoginView, logout_then_login, )
 
+from account.views import RegisterView, Edit, edit
 from . import views
 
 app_name = 'account'
 urlpatterns = [
-    path('login/', login, name='login'),
+    path('login/', LoginView.as_view(), name='login'),
     path('logout/', logout, name='logout'),
-    path('register/', views.register, name='register'),
+    path('register/', RegisterView.as_view(), name='register'),
     path('activate/<code>/', views.activate_user_view, name='activate'),
-    path('edit/', views.edit, name='edit'),
+    path('edit/', Edit.as_view(), name='edit'),
     path('logout_then_login/', logout_then_login, name='logout_then_login'),
     path('', views.dashboard, name='dashboard'),
     path('users/', views.user_list, name='user_list'),

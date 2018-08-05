@@ -14,5 +14,6 @@
                 {{ image.title }}
             </a>
         </div>
+        <li>{{ image.title }} - <a href="{% url 'images:delete_image' pk=image.pk slug=image.slug %}">Delete</a></li>
     </div>
 {% endfor %}
