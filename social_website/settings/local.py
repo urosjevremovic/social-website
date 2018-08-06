@@ -106,6 +106,8 @@ DATABASES = {
     }
 }
 
+CSRF_FAILURE_VIEW = 'account.views.csrf_failure'
+
 
 # Password validation
 

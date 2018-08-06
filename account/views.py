@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView
@@ -217,3 +217,7 @@ def activate_user_view(request, code=None, *args, **kwargs):
                 return render(request, 'account/account_activated.html', {"user": user})
     # invalid code
     return redirect(reverse('account:login'))
+
+
+def csrf_failure(request):
+    return render(request, '403.html')

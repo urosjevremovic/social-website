@@ -15,9 +15,8 @@ from braces.views import JSONResponseMixin
 
 from common import ajax_required
 from actions.utils import create_action
-from images.decorators import user_is_entry_author
 
-from .forms import ImageCreateForm
+from .forms import ImageCreateForm, ImageUpdateForm
 from .models import Image
 
 
@@ -52,7 +51,6 @@ class ImageDelete(LoginRequiredMixin, DeleteView):
             return HttpResponseRedirect('/')
         else:
             raise PermissionDenied
-
 
 class ImageCreate(LoginRequiredMixin, CreateView):
     model = Image

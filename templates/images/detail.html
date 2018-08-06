@@ -6,6 +6,11 @@
 {% block content %}
     <h1>{{ image.title }}</h1>
     <h2>posted by <a href="{{ image.user.get_absolute_url }}">{{ image.user.get_full_name }}</a></h2>
+    <a href="{% url 'images:update' pk=image.pk slug=image.slug %}">
+        Update
+    </a>
+    <br>
+    <br>
     {% thumbnail image.image "260" as im %}
         <a href="{{ im.url }}">
             <img src="{{ im.url }}" class="image-detail">

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit your post{% endblock title %}
+
+{% block content %}
+    <h1>Edit your post:</h1>
+    <p>You can edit your post using the following form:</p>
+
+        <form action="." method="post">
+            {{ form|crispy }}
+            {% csrf_token %}
+            <p><input type="submit" value="Save changes"></p>
+        </form>
+{% endblock %}
